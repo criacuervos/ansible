@@ -21,6 +21,10 @@ io.sockets.on('connection', newConnection);
 
 function newConnection(socket) {
   console.log('new connection: ' + socket.id);
+    
+  socket.on('send-chat-message', message => {
+    socket.broadcast.emit('chat-message', message)
+  })
 
   socket.on('mouse', mouseMessage);
 
