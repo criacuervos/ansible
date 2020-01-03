@@ -1,5 +1,5 @@
 * {
-  background: tomato;
+  background-color: rgb(255, 183, 183);
 }
 
 body {
@@ -9,16 +9,22 @@ body {
   justify-content: center;
 }
 
+#chat-container {
+  border: solid;
+  border-width: 2rem;
+  border-color:tomato;
+}
+
 #message-container {
   width: 80%;
   max-width: 12em;
 }
 
 #message-container div {
-  background-color: grey;
+  background-color: pink;
   padding: 5px;
 }
 
 #message-container div:nth-child(2n) {
-  background-color: wheat;
+  background-color: palevioletred;
 }

@@ -19,19 +19,25 @@ io.sockets.on('connection', newConnection);
 //sockets work on different types of events
 //this sockets calls the function on, to set up a connection event
 
-function newConnection(socket) {
-  console.log('new connection: ' + socket.id);
-    
-  socket.on('send-chat-message', message => {
-    socket.broadcast.emit('chat-message', message)
+let users = {}
+
+//i want the key of this users object to be the ID of the socket
+
+
+io.on('connection', socket => {
+  socket.on('new-user', name => {
+    users[socket.id] = name 
+    socket.broadcast.emit('user-connected', name)
   })
 
+  socket.on('send-chat-message', message => {
+    socket.broadcast.emit('chat-message', { message: message, name: users[socket.id] })
+  })
+  //try converting this object into a json  string then converting it back 
+  //also investigate documentation for socket.broadcast 
   socket.on('mouse', mouseMessage);
 
   function mouseMessage(data) {
-    console.log(data);
-
     socket.broadcast.emit('mouse', data);
   }  
-
-}
+})
