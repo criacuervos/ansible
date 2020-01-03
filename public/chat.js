@@ -8,16 +8,13 @@ const name = prompt('What is your name?')
 appendMessage('You joined')
 socket.emit('new-user', name)
 
-socket.on('chat-message', data => {
-  console.log(data)
-  console.log(typeof data)
-  appendMessage(`${data.name}: ${data.message}`)
+socket.on('chat-message', ({message}) => {
+  appendMessage(`${message.name}: ${message.message}`)
 })
 
 socket.on('user-connected', name => {
   appendMessage(`${name} connected`)
 })
-
 
 messageForm.addEventListener('submit', event => {
   event.preventDefault()
