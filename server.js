@@ -15,7 +15,7 @@ var io = socket(server);
 //imported the library (it now exists as a big function) with the server variable which holds (local3000) 
 //io is the object that we go inside of to this thing called sockets, below 
 
-io.sockets.on('connection', newConnection);
+// io.sockets.on('connection', newConnection);
 //sockets work on different types of events
 //this sockets calls the function on, to set up a connection event
 
