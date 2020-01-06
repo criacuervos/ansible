@@ -8,8 +8,9 @@ const name = prompt('What is your name?')
 appendMessage('You joined')
 socket.emit('new-user', name)
 
-socket.on('chat-message', ({message}) => {
-  appendMessage(`${message.name}: ${message.message}`)
+socket.on('chat-message', data => {
+  console.log(data)
+  appendMessage(`${data.name}: ${data.message}`)
 })
 
 socket.on('user-connected', name => {
@@ -21,8 +22,8 @@ messageForm.addEventListener('submit', event => {
   //be able to get the name here
 
   const message = messageInput.value
-  appendMessage(`You: ${message}`)
-  socket.emit('send-chat-message', {message, name})
+  
+  socket.emit('send-chat-message', {name, message})
   messageInput.value = ''
 })
 

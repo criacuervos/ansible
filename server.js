@@ -19,26 +19,26 @@ var io = socket(server);
 //sockets work on different types of events
 //this sockets calls the function on, to set up a connection event
 
-let users = {}
-
+// const users = {}
 //i want the key of this users object to be the ID of the socket
 
 
 io.on('connection', socket => {
+
   socket.on('new-user', name => {
-    users[socket.id] = name 
+    // users[id] = name 
     socket.broadcast.emit('user-connected', name)
-  })
+  });
 
-  socket.on('send-chat-message', data => {
-    console.log(data)
-    socket.broadcast.emit('chat-message', { message, name} )
-  })
-  //try converting this object into a json  string then converting it back 
-  //also investigate documentation for socket.broadcast 
+  socket.on('send-chat-message', ({ name, message }) => {
+    // console.log('key', Object.keys(users))
+    // console.log('id', socket.id)
+    socket.broadcast.emit('chat-message', {message, name})
+  });
+
+  //we are sending this object with a message & name down to the client 
   socket.on('mouse', mouseMessage);
-
   function mouseMessage(data) {
     socket.broadcast.emit('mouse', data);
-  }  
+  }
 })
