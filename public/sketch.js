@@ -1,9 +1,9 @@
 var socket;
 
 function setup() {
-  createCanvas(800, 600)
+  let canvas = createCanvas(800, 600)
   background(40);
-
+  canvas.parent('sketch-holder');
   socket = io.connect();
   socket.on('mouse', newDrawing);
 

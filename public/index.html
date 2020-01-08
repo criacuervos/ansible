@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="">
     <link rel="stylesheet" type="text/css" href="index.css" media="screen"/>
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap" rel="stylesheet">
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,20 +12,52 @@
     <script src="libraries/p5.js"></script>
     <script src="libraries/p5.sound.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+    <!-- sketch ap -->
     <script src="sketch.js"></script>
+
     <!-- chat app -->
     <script defer src="chat.js"></script>
-  </head>
-  <body>
 
-    <h1>chat app</h1>
+    <!-- toggle draw sketch -->
+    <script> 
+    function showSketch(){
+      var sketch = document.getElementById("sketch-holder");
+      if (sketch.style.display === "none") {
+        sketch.style.display = "block";
+      } else {
+        sketch.style.display = "none";
+      }
+    }
+
+
+    function showChat() {
+      var chat = document.getElementById("chat-container");
+      if (chat.style.display === "none") {
+        chat.style.display = "block";
+      } else {
+        chat.style.display = "none";
+      }
+    }
+    </script>
+  </head>
+
+  <body>
+    <span class="buttons">
+      <button class="button" onclick="showSketch()">Draw!</button>
+      <button class="button" onclick="showChat()">Chat!</button>
+    </span>
     <!-- chat app -->
-    <div id=chat-container>
+    <div id="chat-container">
       <div id="message-container"></div>
+
       <form id="send-container">
-        <input type="text" id="message-input">
+        <input type="text" id="message-input" placeholder="type here..">
         <button type="submit" id="send-button">Send</button>
       </form>
+    </div>
+
+    <div id="sketch-holder">
     </div>
 
   </body>

@@ -19,8 +19,6 @@ socket.on('user-connected', name => {
 
 messageForm.addEventListener('submit', event => {
   event.preventDefault()
-  //be able to get the name here
-
   const message = messageInput.value
   
   socket.emit('send-chat-message', {name, message})
