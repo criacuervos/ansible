@@ -35,8 +35,9 @@ io.on('connection', socket => {
     // console.log('id', socket.id)
     socket.broadcast.emit('chat-message', {message, name})
   });
-
   //we are sending this object with a message & name down to the client 
+
+  //this is how the sketch works
   socket.on('mouse', mouseMessage);
   function mouseMessage(data) {
     socket.broadcast.emit('mouse', data);
