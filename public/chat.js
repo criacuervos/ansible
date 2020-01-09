@@ -1,28 +1,39 @@
 var socket = io.connect()
 
+const nicknameContainer = document.getElementById('nickname-container')
+const nicknameInput = document.getElementById('nickname-input')
+
 const messageContainer = document.getElementById('message-container')
 const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
 
-const name = prompt('What is your name?')
-appendMessage('You joined')
-socket.emit('new-user', name)
+let name = ""
+
+appendMessage('welcome to the chat!')
+
+// socket.emit('new-user', name)
 
 socket.on('chat-message', data => {
   console.log(data)
   appendMessage(`${data.name}: ${data.message}`)
 })
 
-socket.on('user-connected', name => {
-  appendMessage(`${name} connected`)
-})
+// socket.on('user-connected', name => {
+//   appendMessage(`${name} connected`)
+// })
 
 messageForm.addEventListener('submit', event => {
   event.preventDefault()
   const message = messageInput.value
-  
+
   socket.emit('send-chat-message', {name, message})
   messageInput.value = ''
+})
+
+nicknameContainer.addEventListener('submit', event => {
+  event.preventDefault()
+  const user = nicknameInput.value
+  name = user 
 })
 
 function appendMessage(message){

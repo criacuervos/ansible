@@ -14,7 +14,6 @@
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 
     <!-- sketch ap -->
-    <script src="sketch.js"></script>
 
     <!-- chat app -->
     <script defer src="chat.js"></script>
@@ -29,7 +28,6 @@
         sketch.style.display = "none";
       }
     }
-
 
     function showChat() {
       var chat = document.getElementById("chat-container");
@@ -47,17 +45,26 @@
       <button class="button" onclick="showSketch()">Draw!</button>
       <button class="button" onclick="showChat()">Chat!</button>
     </span>
+    
     <!-- chat app -->
     <div id="chat-container">
       <div id="message-container"></div>
+      
+      <form id="nickname-container">
+        <input type="text" id="nickname-input" placeholder="ur name">
+        <button type="submit" id="nickname-button">save name</button>
+      </form>
 
       <form id="send-container">
         <input type="text" id="message-input" placeholder="type here..">
-        <button type="submit" id="send-button">Send</button>
+        <button type="submit" id="send-button">send</button>
       </form>
+      
     </div>
 
     <div id="sketch-holder">
+        <script src="sketch.js"></script>
+
     </div>
 
   </body>
