@@ -24,29 +24,36 @@ button {
 }
 
 #chat-container {
+  display:flex;
   box-sizing: border-box; 
   border:solid;
   position: relative;
   direction: ltr;
 }
 
+#nickname-container {
+  width: 50%;
+  bottom: 0px;
+  margin: auto;
+  padding: 1em;
+}
+
 #send-container {
-  display:inline-block;
+  width: 50%;
   position: absolute;
   bottom: 0px;
   margin: auto;
-  padding: 2em;
+  padding: 1em;
 }
 
 #message-container {
-  max-height: 200px;
+  max-height: 290px;
   padding: 1em;
   overflow-wrap: break-word;
   overflow: auto;
-
 }
 
-#sketch-container { 
+#sketch-holder { 
   grid-column-start: 3;
 }
 

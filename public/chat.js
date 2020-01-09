@@ -28,6 +28,11 @@ messageForm.addEventListener('submit', event => {
 
   socket.emit('send-chat-message', {name, message})
   messageInput.value = ''
+
+  window.setInterval(function() {
+    var elem = document.getElementById('message-container');
+    elem.scrollTop = elem.scrollHeight;
+  }, 1000);
 })
 
 nicknameContainer.addEventListener('submit', event => {
