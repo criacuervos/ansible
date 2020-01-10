@@ -1,7 +1,6 @@
 var socket;
 let r, g, b;
 let bgColor;
-// let color = '#000'
 let cv
 
 function setup() {
@@ -15,6 +14,7 @@ function setup() {
   g = random(255);
   b = random(255);
   text('Hold the e key to erase', 20, 50);
+
 
 }
 
