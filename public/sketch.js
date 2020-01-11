@@ -1,49 +1,73 @@
 var socket;
 let r, g, b;
 let bgColor;
-let cv
+let cv;
+let x, y;
+
 
 function setup() {
 	cv = createCanvas(windowWidth / 2, windowHeight / 2)
   bgColor = 220;
   cv.background(bgColor);
   cv.parent('sketch-holder');
-  socket = io.connect();
-  socket.on('mouse', newDrawing);
+
   r = random(255);
   g = random(255);
   b = random(255);
   text('Hold the e key to erase', 20, 50);
 
+  socket = io.connect();
+  socket.on('mouse', newDrawing);
+
+  //this is how we randomly generate the sprite
+  x = random(200, 400);
+  y = random(50, 200)
+  let c = color(r, g, b);
+  noStroke();
+  fill(c)
+  rect(x, y, 50, 50);
 
 }
 
-//we need to have a reference to the sockets library in the client
+function draw(){
+}
+
+function draw(){
+  if(mouseIsPressed === true ){
+    mouseDragged();
+  } else if (keyIsPressed && key == 'e'){
+    drawEraser();
+  }
+}
+
 function newDrawing(data){
   if (!data.erase){
-  strokeWeight(5)
-  stroke(255)
-  fill(r, g, b);
   line(data.x, data.y, data.px, data.py)
+  stroke(data.r, data.g, data.b);
+  strokeWeight(5)
   } else {
+  line(data.x, data.y, data.px, data.py)
   strokeWeight(60);
   stroke(bgColor);
-  line(data.x, data.y, data.px, data.py)
   }
 }
 
 function mouseDragged() {
-  strokeWeight(5)
-   stroke(g, r, b);
   line(mouseX, mouseY, pmouseX, pmouseY)
+  strokeWeight(5)
+  stroke(r, g, b);
+
   let data = {
+    r: r,
+    g: g,
+    b: b,
     erase: false,
-    color: color,
     x: mouseX,
     y: mouseY,
     px: pmouseX,
     py: pmouseY
   }
+  console.log(data)
   socket.emit('mouse', data)
 
 }
@@ -63,13 +87,7 @@ function drawEraser(){
   socket.emit('mouse', data)
 }
 
-function draw() {
-  if(mouseIsPressed === true ){
-    mouseDragged();
-  } else if (keyIsPressed && key == 'e'){
-    drawEraser();
-  }
-}
+
 
 
 
