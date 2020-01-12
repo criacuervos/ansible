@@ -11,16 +11,13 @@ let name = ""
 
 appendMessage('welcome to the chat!')
 
-// socket.emit('new-user', name)
-
 socket.on('chat-message', data => {
-  console.log(data)
   appendMessage(`${data.name}: ${data.message}`)
 })
 
-// socket.on('user-connected', name => {
-//   appendMessage(`${name} connected`)
-// })
+socket.on('user-connected', name => {
+  appendMessage(`${name} connected`)
+})
 
 messageForm.addEventListener('submit', event => {
   event.preventDefault()
@@ -30,15 +27,21 @@ messageForm.addEventListener('submit', event => {
   messageInput.value = ''
 
   window.setInterval(function() {
-    var elem = document.getElementById('message-container');
+    let elem = document.getElementById('message-container');
     elem.scrollTop = elem.scrollHeight;
   }, 1000);
 })
 
+//limit the length of user nickname input here 
 nicknameContainer.addEventListener('submit', event => {
   event.preventDefault()
   const user = nicknameInput.value
   name = user 
+  socket.emit('new-user', name)
+})
+
+socket.on('user-disconnected', () => {
+  appendMessage(`a user has disconnected`)
 })
 
 function appendMessage(message){

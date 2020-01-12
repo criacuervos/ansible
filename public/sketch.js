@@ -4,7 +4,6 @@ let bgColor;
 let cv;
 let x, y;
 
-
 function setup() {
 	cv = createCanvas(windowWidth / 2, windowHeight / 2)
   bgColor = 220;
@@ -17,20 +16,21 @@ function setup() {
   text('Hold the e key to erase', 20, 50);
 
   socket = io.connect();
-  socket.on('mouse', newDrawing);
+  
+  makeCube();
 
-  //this is how we randomly generate the sprite
-  x = random(200, 400);
-  y = random(50, 200)
-  let c = color(r, g, b);
-  noStroke();
-  fill(c)
-  rect(x, y, 50, 50);
+  socket.on('mouse', newDrawing)
 
+  socket.on('load-cube', cube => {
+    console.log("WERE IN THE LOAD CUBE FUNCTION")
+    console.log(cube)
+    noStroke();
+    fill(cube.cubeR, cube.cubeG, cube.cubeB)
+    rect(cube.cubeX, cube.cubeY, 50, 50);
+  });
 }
 
-function draw(){
-}
+
 
 function draw(){
   if(mouseIsPressed === true ){
@@ -38,6 +38,26 @@ function draw(){
   } else if (keyIsPressed && key == 'e'){
     drawEraser();
   }
+}
+
+function makeCube(){
+  x = random(200, 400);
+  y = random(50, 200)
+  let c = color(r, g, b);
+  noStroke();
+  fill(c)
+  rect(x, y, 50, 50);
+
+  let cube = {
+    cubeX: x,
+    cubeY: y,
+    cubeR: r,
+    cubeG: g,
+    cubeB: b, 
+  }
+
+  socket.emit('user-joined', cube)
+  console.log("WERE INSIDE MAKE CUBE")
 }
 
 function newDrawing(data){
@@ -67,9 +87,8 @@ function mouseDragged() {
     px: pmouseX,
     py: pmouseY
   }
-  console.log(data)
-  socket.emit('mouse', data)
 
+  socket.emit('mouse', data)
 }
 //Above is the code to be able to send the message about the data containing current location of one clients cursor to the server, so that it can then send that out to the other client
 
@@ -86,8 +105,3 @@ function drawEraser(){
   }
   socket.emit('mouse', data)
 }
-
-
-
-
-
