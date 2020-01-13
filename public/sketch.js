@@ -3,10 +3,13 @@ let r, g, b;
 let bgColor;
 let cv;
 let x, y;
-
 let button; 
 
+var boxSprite;
+
 function setup() {
+  socket = io.connect();
+
 	cv = createCanvas(650, 700)
   bgColor = 220;
   cv.background(bgColor);
@@ -22,7 +25,6 @@ function setup() {
   b = random(255);
   text('Hold the e key to erase', 20, 50);
 
-  socket = io.connect();
   
   makeCube();
 
@@ -32,14 +34,16 @@ function setup() {
   //how it is right now i think it will just show all of the cubes stored in the server
   //so i have to figure out a way to delete a cube once someone disconnects 
   socket.on('cube-history', allCubes => {
-    console.log(allCubes)
-    console.log('in the cube history function')
+    // console.log(allCubes)
+    // console.log('in the cube history function')
+
     if (allCubes){
       for(const cube in allCubes){
         console.log(allCubes[cube].cubeX)
-        noStroke();
-        fill(allCubes[cube].cubeR, allCubes[cube].cubeG, allCubes[cube].cubeB);
-        rect(allCubes[cube].cubeX, allCubes[cube].cubeY, 50, 50);
+        boxSprite = createSprite(allCubes[cube].cubeX, allCubes[cube].cubeY, 30, 30);
+        boxSprite.shapeColor = color(allCubes[cube].cubeR, allCubes[cube].cubeG, allCubes[cube].cubeB);
+
+
       }
     }
   })
@@ -47,13 +51,15 @@ function setup() {
   socket.on('load-cube', cube => {
     console.log("WERE IN THE LOAD CUBE FUNCTION")
     // console.log(cube)
-    noStroke();
-    fill(cube.cubeR, cube.cubeG, cube.cubeB)
-    rect(cube.cubeX, cube.cubeY, 50, 50);
+    boxSprite = createSprite(cube.cubeX, cube.cubeY, 30, 30);
+    boxSprite.shapeColor = color(cube.cubeR, cube.cubeG, cube.cubeB);
+
   });
 }
 
-function draw(){
+function draw(){  
+  drawSprites();
+
   if(mouseIsPressed === true ){
     mouseDragged();
   } else if (keyIsPressed && key == 'e'){
@@ -64,10 +70,9 @@ function draw(){
 function makeCube(){
   x = random(200, 400);
   y = random(50, 200)
-  let c = color(r, g, b);
-  noStroke();
-  fill(c)
-  rect(x, y, 50, 50);
+
+  boxSprite = createSprite(x, y, 30, 30);
+  boxSprite.shapeColor = color(r, g, b);
 
   let cube = {
     cubeX: x,
@@ -76,6 +81,7 @@ function makeCube(){
     cubeG: g,
     cubeB: b, 
   }
+
   socket.emit('user-joined', cube)
   console.log("WERE INSIDE MAKE CUBE")
 }
@@ -107,7 +113,6 @@ function mouseDragged() {
     px: pmouseX,
     py: pmouseY
   }
-
   socket.emit('mouse', data)
 }
 //Above is the code to be able to send the message about the data containing current location of one clients cursor to the server, so that it can then send that out to the other client
