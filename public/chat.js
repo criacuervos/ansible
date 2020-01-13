@@ -12,11 +12,19 @@ let name = ""
 appendMessage('welcome to the chat!')
 
 socket.on('chat-message', data => {
-  appendMessage(`${data.name}: ${data.message}`)
-})
+  //here we check if its an array because thats how we load the previous chat data 
+  if (Array.isArray(data)){
+    //make a for loop here which will index into the array of objects 
+    for(const message in data){
+      appendMessage(`${data[message].name}: ${data[message].message}`)
+    }
+  } else if (!Array.isArray(data)){ //and this is how we send messages if its a new msg, new connection, or disconnect!
+    appendMessage(`${data.name}: ${data.message}`)
+  };
+});
 
 socket.on('user-connected', name => {
-  appendMessage(`${name} connected`)
+  appendMessage(`${name} joined the chat`)
 })
 
 messageForm.addEventListener('submit', event => {

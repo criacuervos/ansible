@@ -31,7 +31,6 @@ function setup() {
 }
 
 
-
 function draw(){
   if(mouseIsPressed === true ){
     mouseDragged();
