@@ -8,9 +8,9 @@ console.log("my server is running!");
 
 let io = socket(server);
 
-const allCubes = []
 const client = []
 const history = []
+const allCubes = []
 
 //Telling Express+Socket.io App To Listen To Port
 io.on('connection', socket => {
@@ -18,8 +18,9 @@ io.on('connection', socket => {
   client.push({id : socket.client.id})
   let getClientID = client.find(e => (e.id === socket.client.id))
   if(getClientID){
-    console.log(history)
     socket.emit("chat-message", history);
+    socket.emit("cube-history", allCubes);
+
   }
 
   //chat listeners
@@ -51,5 +52,10 @@ io.on('connection', socket => {
     socket.broadcast.emit('load-cube', cube)
   });
 
+  // client.push({id : socket.client.id})
+  // let getClientID = client.find(e => (e.id === socket.client.id))
+  // if(getClientID){
+  //   socket.emit("cube-history", allCubes);
+  // }
 
 })

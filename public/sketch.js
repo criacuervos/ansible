@@ -4,11 +4,18 @@ let bgColor;
 let cv;
 let x, y;
 
+let button; 
+
 function setup() {
-	cv = createCanvas(windowWidth / 2, windowHeight / 2)
+	cv = createCanvas(650, 700)
   bgColor = 220;
   cv.background(bgColor);
   cv.parent('sketch-holder');
+
+  button = createButton('click me');
+  button.parent('sketch-holder')
+  button.position(19, 19);
+  button.mousePressed()
 
   r = random(255);
   g = random(255);
@@ -21,15 +28,30 @@ function setup() {
 
   socket.on('mouse', newDrawing)
 
+  //this will draw the cubes of the people currently in the room
+  //how it is right now i think it will just show all of the cubes stored in the server
+  //so i have to figure out a way to delete a cube once someone disconnects 
+  socket.on('cube-history', allCubes => {
+    console.log(allCubes)
+    console.log('in the cube history function')
+    if (allCubes){
+      for(const cube in allCubes){
+        console.log(allCubes[cube].cubeX)
+        noStroke();
+        fill(allCubes[cube].cubeR, allCubes[cube].cubeG, allCubes[cube].cubeB);
+        rect(allCubes[cube].cubeX, allCubes[cube].cubeY, 50, 50);
+      }
+    }
+  })
+
   socket.on('load-cube', cube => {
     console.log("WERE IN THE LOAD CUBE FUNCTION")
-    console.log(cube)
+    // console.log(cube)
     noStroke();
     fill(cube.cubeR, cube.cubeG, cube.cubeB)
     rect(cube.cubeX, cube.cubeY, 50, 50);
   });
 }
-
 
 function draw(){
   if(mouseIsPressed === true ){
@@ -54,7 +76,6 @@ function makeCube(){
     cubeG: g,
     cubeB: b, 
   }
-
   socket.emit('user-joined', cube)
   console.log("WERE INSIDE MAKE CUBE")
 }

@@ -20,7 +20,7 @@ socket.on('chat-message', data => {
     }
   } else if (!Array.isArray(data)){ //and this is how we send messages if its a new msg, new connection, or disconnect!
     appendMessage(`${data.name}: ${data.message}`)
-  };
+  }
 });
 
 socket.on('user-connected', name => {
