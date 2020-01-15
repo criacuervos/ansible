@@ -5,7 +5,6 @@
   position: relative;
   font-size: 1.1em;
   font-family: 'Inconsolata', monospace;
-
 }
 
 body {
@@ -59,7 +58,7 @@ button {
 
 #message-container {
   flex-grow: 1;
-  max-height: 290px;
+  max-height: 590px;
   padding: 20px;
   overflow-wrap: break-word;
   overflow: auto;

@@ -23,27 +23,22 @@ function setup() {
   r = random(255);
   g = random(255);
   b = random(255);
-  text('Hold the e key to erase', 20, 50);
 
-  
+  text('Hold the e key to erase', 10, 60);
   makeCube();
 
   socket.on('mouse', newDrawing)
-
   //this will draw the cubes of the people currently in the room
   //how it is right now i think it will just show all of the cubes stored in the server
   //so i have to figure out a way to delete a cube once someone disconnects 
   socket.on('cube-history', allCubes => {
     // console.log(allCubes)
     // console.log('in the cube history function')
-
     if (allCubes){
       for(const cube in allCubes){
         console.log(allCubes[cube].cubeX)
         boxSprite = createSprite(allCubes[cube].cubeX, allCubes[cube].cubeY, 30, 30);
         boxSprite.shapeColor = color(allCubes[cube].cubeR, allCubes[cube].cubeG, allCubes[cube].cubeB);
-
-
       }
     }
   })
@@ -53,23 +48,36 @@ function setup() {
     // console.log(cube)
     boxSprite = createSprite(cube.cubeX, cube.cubeY, 30, 30);
     boxSprite.shapeColor = color(cube.cubeR, cube.cubeG, cube.cubeB);
-
   });
 }
 
-function draw(){  
-  drawSprites();
-
+function draw(){ 
   if(mouseIsPressed === true ){
     mouseDragged();
   } else if (keyIsPressed && key == 'e'){
     drawEraser();
   }
+
+  drawSprites();
+
+  if(keyIsDown(LEFT_ARROW)){
+    boxSprite.position.x -= 2;
+  }
+  if(keyIsDown(RIGHT_ARROW)){
+    boxSprite.position.x += 2;
+  }
+  if(keyIsDown(UP_ARROW)){
+    boxSprite.position.y -= 2;
+  }
+  if(keyIsDown(DOWN_ARROW)){
+    boxSprite.position.y += 2;
+  }
+
 }
 
 function makeCube(){
   x = random(200, 400);
-  y = random(50, 200)
+  y = random(50, 200);
 
   boxSprite = createSprite(x, y, 30, 30);
   boxSprite.shapeColor = color(r, g, b);

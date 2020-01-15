@@ -48,8 +48,8 @@ nicknameContainer.addEventListener('submit', event => {
   socket.emit('new-user', name)
 })
 
-socket.on('user-disconnected', () => {
-  appendMessage(`a user has disconnected`)
+socket.on('user-disconnected', name => {
+  appendMessage(`${name} disconnected`)
 })
 
 function appendMessage(message){

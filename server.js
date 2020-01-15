@@ -12,35 +12,35 @@ const client = []
 const history = []
 const allCubes = []
 
+const users = {} 
+
 //Telling Express+Socket.io App To Listen To Port
 io.on('connection', socket => {
+  console.log(socket.id)
 
   client.push({id : socket.client.id})
   let getClientID = client.find(e => (e.id === socket.client.id))
   if(getClientID){
     socket.emit("chat-message", history);
     socket.emit("cube-history", allCubes);
-
   }
 
   //chat listeners
   socket.on('new-user', name => {
+    users[socket.client.id] = name 
+    console.log(users)
     socket.broadcast.emit('user-connected', name)
   });
 
-  // socket.on('send-chat-message', ({ name, message }) => {
   socket.on('send-chat-message', (data) => {
     history.push(data)
-    // socket.broadcast.emit('chat-message', {message, name})
     socket.broadcast.emit('chat-message', data)
-
   });
 
-  socket.on('disconnect', disconnectMessage);
-  function disconnectMessage(){
-    socket.broadcast.emit('user-disconnected')
-  }
-
+  socket.on('disconnect', () => {
+    socket.broadcast.emit('user-disconnected', users[socket.id])
+    delete users[socket.id]
+  })
   //sketch listeners
   socket.on('mouse', mouseMessage);
   function mouseMessage(data) {
