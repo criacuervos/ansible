@@ -1,5 +1,10 @@
+::selection {
+  color: none;
+  background: none;
+}
+
 * {
-  background-color: rgb(255, 183, 183);
+  /* background-color: rgb(255, 183, 183); */
   padding: 0;
   margin: 0;
   position: relative;
@@ -8,9 +13,8 @@
 }
 
 body {
-  display: grid;
-  grid-template-columns: auto 30rem auto;
-  background-color: black;
+  /* display: grid;
+  grid-template-columns: auto; */
   padding: 10px;
 }
 
@@ -22,13 +26,15 @@ button {
 
 #chat-container {
   box-sizing: border-box; 
-  border: solid;
   position: relative;
   direction: ltr;
-
+  width: 30em;
+  height: 27em;
+  border:solid;
+/* 
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: wrap; */
 }
 
 #nickname-input {
@@ -38,7 +44,7 @@ button {
 #nickname-container {
   position: absolute;
   left:0;
-  padding:10px;
+  padding: 10px;
   align-self: flex-end;
 }
 
@@ -53,7 +59,6 @@ button {
   right: 0;
   padding: 10px;
   align-self: flex-end;
-
 }
 
 #message-container {
@@ -62,6 +67,8 @@ button {
   padding: 20px;
   overflow-wrap: break-word;
   overflow: auto;
+  height: 20em;
+
 }
 
 #sketch-holder { 
@@ -72,14 +79,14 @@ button {
   border: solid;
   direction: ltr;
 }
-#message-container div {
+/* #message-container div {
   background-color: pink;
   padding: 5px;
 }
 
 #message-container div:nth-child(2n) {
   background-color: palevioletred;
-}
+} */
 
 form button { 
   background: rgb(130, 224, 255); 

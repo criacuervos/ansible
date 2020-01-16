@@ -3,40 +3,30 @@ let r, g, b;
 let bgColor;
 let cv;
 let x, y;
-let button; 
+let boxSprite;
 
-var boxSprite;
+let drawingHistory = [];
 
 function setup() {
   socket = io.connect();
-
-	cv = createCanvas(650, 700)
-  bgColor = 220;
-  cv.background(bgColor);
-  cv.parent('sketch-holder');
-
-  button = createButton('click me');
-  button.parent('sketch-holder')
-  button.position(19, 19);
-  button.mousePressed()
-
+  cv = createCanvas(windowWidth, windowHeight)
+  cv.position(0, 0);
+  cv.style('z-index', '-1')
+  // bgColor = 175;
+  // cv.background(bgColor);
+  noStroke();
   r = random(255);
   g = random(255);
   b = random(255);
 
-  text('Hold the e key to erase', 10, 60);
+  // text('Hold the e key to erase', 10, 60);
   makeCube();
 
   socket.on('mouse', newDrawing)
-  //this will draw the cubes of the people currently in the room
-  //how it is right now i think it will just show all of the cubes stored in the server
-  //so i have to figure out a way to delete a cube once someone disconnects 
+
   socket.on('cube-history', allCubes => {
-    // console.log(allCubes)
-    // console.log('in the cube history function')
     if (allCubes){
       for(const cube in allCubes){
-        console.log(allCubes[cube].cubeX)
         boxSprite = createSprite(allCubes[cube].cubeX, allCubes[cube].cubeY, 30, 30);
         boxSprite.shapeColor = color(allCubes[cube].cubeR, allCubes[cube].cubeG, allCubes[cube].cubeB);
       }
@@ -45,13 +35,15 @@ function setup() {
 
   socket.on('load-cube', cube => {
     console.log("WERE IN THE LOAD CUBE FUNCTION")
-    // console.log(cube)
     boxSprite = createSprite(cube.cubeX, cube.cubeY, 30, 30);
     boxSprite.shapeColor = color(cube.cubeR, cube.cubeG, cube.cubeB);
   });
 }
 
 function draw(){ 
+  bgColor = 175;
+  cv.background(bgColor);
+
   if(mouseIsPressed === true ){
     mouseDragged();
   } else if (keyIsPressed && key == 'e'){
@@ -59,25 +51,33 @@ function draw(){
   }
 
   drawSprites();
+  const currentUser = boxSprite
 
   if(keyIsDown(LEFT_ARROW)){
-    boxSprite.position.x -= 2;
+    currentUser.position.x -= 2;
+    // console.log(boxSprite.position.x )
   }
   if(keyIsDown(RIGHT_ARROW)){
-    boxSprite.position.x += 2;
+    currentUser.position.x += 2;
   }
   if(keyIsDown(UP_ARROW)){
-    boxSprite.position.y -= 2;
+    currentUser.position.y -= 2;
   }
   if(keyIsDown(DOWN_ARROW)){
-    boxSprite.position.y += 2;
+    currentUser.position.y += 2;
   }
 
+  for(const drawing in drawingHistory){
+    console.log(drawingHistory[drawing].x)
+    line(drawingHistory[drawing].x, drawingHistory[drawing].y, drawingHistory[drawing].px, drawingHistory[drawing].py)
+    stroke(drawingHistory[drawing].r, drawingHistory[drawing].g, drawingHistory[drawing].b);
+    strokeWeight(5)
+  }
 }
 
 function makeCube(){
-  x = random(200, 400);
-  y = random(50, 200);
+  x = random(500, windowWidth);
+  y = random(50, windowHeight);
 
   boxSprite = createSprite(x, y, 30, 30);
   boxSprite.shapeColor = color(r, g, b);
@@ -95,6 +95,8 @@ function makeCube(){
 }
 
 function newDrawing(data){
+  drawingHistory.push(data)
+
   if (!data.erase){
   line(data.x, data.y, data.px, data.py)
   stroke(data.r, data.g, data.b);
@@ -121,6 +123,10 @@ function mouseDragged() {
     px: pmouseX,
     py: pmouseY
   }
+
+  drawingHistory.push(data)
+  console.log(drawingHistory)
+
   socket.emit('mouse', data)
 }
 //Above is the code to be able to send the message about the data containing current location of one clients cursor to the server, so that it can then send that out to the other client

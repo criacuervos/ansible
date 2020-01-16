@@ -41,6 +41,7 @@ io.on('connection', socket => {
     socket.broadcast.emit('user-disconnected', users[socket.id])
     delete users[socket.id]
   })
+  
   //sketch listeners
   socket.on('mouse', mouseMessage);
   function mouseMessage(data) {
@@ -51,11 +52,5 @@ io.on('connection', socket => {
     allCubes.push(cube)
     socket.broadcast.emit('load-cube', cube)
   });
-
-  // client.push({id : socket.client.id})
-  // let getClientID = client.find(e => (e.id === socket.client.id))
-  // if(getClientID){
-  //   socket.emit("cube-history", allCubes);
-  // }
 
 })

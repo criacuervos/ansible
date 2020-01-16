@@ -45,6 +45,11 @@ nicknameContainer.addEventListener('submit', event => {
   event.preventDefault()
   const user = nicknameInput.value
   name = user 
+  
+  const nameElement = document.createElement('p')
+  nameElement.innerText = name 
+  nicknameContainer.append(nameElement)
+  
   socket.emit('new-user', name)
 })
 
