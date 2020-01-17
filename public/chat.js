@@ -1,4 +1,7 @@
-var socket = io.connect()
+// var client = require("socket.io-client");
+// var socket = client.connect("sketch.js");
+
+socket = io.connect()
 
 const nicknameContainer = document.getElementById('nickname-container')
 const nicknameInput = document.getElementById('nickname-input')

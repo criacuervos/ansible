@@ -10,9 +10,12 @@ let io = socket(server);
 
 const client = []
 const history = []
+
 const allCubes = []
 
 const users = {} 
+
+const cubesnClients = {}
 
 //Telling Express+Socket.io App To Listen To Port
 io.on('connection', socket => {
@@ -22,13 +25,12 @@ io.on('connection', socket => {
   let getClientID = client.find(e => (e.id === socket.client.id))
   if(getClientID){
     socket.emit("chat-message", history);
-    socket.emit("cube-history", allCubes);
+    socket.emit("cube-history", cubesnClients);
   }
 
   //chat listeners
   socket.on('new-user', name => {
     users[socket.client.id] = name 
-    console.log(users)
     socket.broadcast.emit('user-connected', name)
   });
 
@@ -41,7 +43,7 @@ io.on('connection', socket => {
     socket.broadcast.emit('user-disconnected', users[socket.id])
     delete users[socket.id]
   })
-  
+
   //sketch listeners
   socket.on('mouse', mouseMessage);
   function mouseMessage(data) {
@@ -49,8 +51,23 @@ io.on('connection', socket => {
   }
 
   socket.on('user-joined', cube => {
-    allCubes.push(cube)
+    // let socketIde = socket.id
+    // allCubes.push({ socketIde: cube})
+    // console.log(allCubes)
+    cubesnClients[socket.client.id] = cube
+    // console.log(cubesnClients) 
+    // allCubes.push(cube)
     socket.broadcast.emit('load-cube', cube)
   });
+
+  socket.on('key-pressed', cubePosition => {
+    socket.broadcast.emit('move-sprite', cubePosition)
+  })
+
+  socket.on('disconnect', () => {
+    socket.broadcast.emit('sprite-disconnect', cubesnClients[socket.id])
+    // console.log(cubesnClients[socket.id])
+    delete cubesnClients[socket.id]
+  })
 
 })
