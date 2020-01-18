@@ -30,19 +30,40 @@
         nickname.style.display = "none";
       }
     } 
+
+    function showChat() {
+      var chat = document.getElementById("chat-container");
+      if (chat.style.display === "none") {
+        chat.style.display = "block";
+      } else {
+        chat.style.display = "none";
+      }
+    }
+
+    function validateForm(nicknameForm){
+      let name = nicknameForm.myname.value
+      if(name == "" || name == null){
+        alert("name can't be blank 😋!")
+        return false;
+      } else { //the name is valid, so lets hide the box 
+        toggleName()
+        return true;
+      }
+    }
+
     </script>
   </head>
 
   <body>
-    
+    <button class="button" onclick="showChat()">Chat!</button>
     <!-- chat app -->
     <div id="chat-container">
       <div id="message-container"></div>
       
       <div id="nickname-container">
-        <form id="nickname-form">
-          <input type="text" class="pa2 input-reset ba bg-transparent w-100 measure" id="nickname-input" placeholder="name">
-          <button type="submit" id="nickname-button" onClick=toggleName()> save </button>
+        <form name="nicknameForm" id="nickname-form" onSubmit="return validateForm(nicknameForm)">
+          <input type="text" class="pa2 input-reset ba bg-transparent w-100 measure" id="nickname-input" placeholder="name" name="myname">
+          <button type="submit" id="nickname-button"> save </button>
         </form>
       </div>
       <form id="send-container">

@@ -15,7 +15,7 @@ const starData = []
 
 //Telling Express+Socket.io App To Listen To Port
 io.on('connection', socket => {
-  console.log(socket.id)
+  // console.log(socket.id)
 
   client.push({id : socket.client.id})
   let getClientID = client.find(e => (e.id === socket.client.id))
@@ -32,7 +32,7 @@ io.on('connection', socket => {
 
   socket.on('send-chat-message', (data) => {
     history.push(data)
-    socket.broadcast.emit('chat-message', data)
+    socket.emit('chat-message', data)
   });
 
   socket.on('disconnect', () => {
@@ -49,14 +49,5 @@ io.on('connection', socket => {
   socket.on('star-states', starPositions => {
     starData.push(starPositions)
   });
-
-  // socket.on('key-pressed', cubePosition => {
-  //   socket.broadcast.emit('move-sprite', cubePosition)
-  // })
-
-  // socket.on('disconnect', () => {
-  //   socket.broadcast.emit('sprite-disconnect', cubesnClients[socket.id])
-  //   delete cubesnClients[socket.id]
-  // })
 
 })

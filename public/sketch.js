@@ -5,7 +5,6 @@ let cv;
 let x, y;
 let radius1, radius2;
 let starPositions = [];
-// socket = io.connect();
 
 function setup() {
   socket = io.connect();
@@ -20,12 +19,14 @@ function setup() {
 
   noStroke()
 
+  socket.on('mouse', newDrawing)
+
   socket.on('send-star-states', starData => {
     // console.log(starData)
     if(starData.length > 0 ){
       console.log("This is what a second or third client should see here")
       for (let {x, y, radius1, radius2} of starData[0]){
-        console.log(x, y, radius1, radius2)
+        // console.log(x, y, radius1, radius2)
         star(x, y, radius1, radius2, 5);
       }
     } else if (starData.length === 0){
@@ -42,7 +43,6 @@ function setup() {
     }
   })
   // socket.on
-  socket.on('mouse', newDrawing)
 }
 
 function draw(){ 
@@ -104,7 +104,6 @@ function mouseDragged() {
 }
 
 function drawEraser(){
-  console.log("in eraser")
   strokeWeight(60);
   stroke(10);
   line(mouseX, mouseY, pmouseX, pmouseY);
