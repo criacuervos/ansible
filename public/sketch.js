@@ -3,15 +3,9 @@ let r, g, b;
 let bgColor;
 let cv;
 let x, y;
-let boxSprite;
-let newboxSprite;
-
-let drawingHistory = [];
-
-let cubePositions = [];
-// var server = app.listen(process.env.PORT || 3000);
-// var io = require('socket.io')(server);
-// require('chat.js')(io);
+let radius1, radius2;
+let starPositions = [];
+// socket = io.connect();
 
 function setup() {
   socket = io.connect();
@@ -19,131 +13,81 @@ function setup() {
   cv = createCanvas(windowWidth, windowHeight)
   cv.position(0, 0);
   cv.style('z-index', '-1')
-  noStroke();
+  cv.background(15)
   r = random(255);
   g = random(255);
   b = random(255);
 
-  makeCube();
+  noStroke()
 
-  socket.on('mouse', newDrawing)
-  
-  socket.on('cube-history', allCubes => {
-    if (allCubes){
-      for(const cube in allCubes){
-        newboxSprite = createSprite(allCubes[cube].cubeX, allCubes[cube].cubeY, 30, 30);
-        newboxSprite.shapeColor = color(allCubes[cube].cubeR, allCubes[cube].cubeG, allCubes[cube].cubeB);
+  socket.on('send-star-states', starData => {
+    // console.log(starData)
+    if(starData.length > 0 ){
+      console.log("This is what a second or third client should see here")
+      for (let {x, y, radius1, radius2} of starData[0]){
+        console.log(x, y, radius1, radius2)
+        star(x, y, radius1, radius2, 5);
       }
+    } else if (starData.length === 0){
+      console.log("This is first client code should go")
+      for (let i = 0; i < 300; i++) {
+        x = random(windowWidth),
+        y = random(windowHeight),
+        radius1 = random(2),
+        radius2 = random(5),
+        star(x, y, radius1, radius2, 5);
+        starPositions.push({x, y, radius1, radius2})
+      }
+      socket.emit('star-states', starPositions)
     }
   })
-
-  socket.on('move-sprite', cubePosition => {
-    // drawSprites()
-    console.log(cubePosition)
-
-    newboxSprite.position.x = cubePosition.positionX
-    newboxSprite.position.y = cubePosition.positionY
-  });
+  // socket.on
+  socket.on('mouse', newDrawing)
 }
 
 function draw(){ 
-  bgColor = 175;
-  cv.background(bgColor);
-
-  // if(mouseIsPressed === true ){
-  //   mouseDragged();
-  // } else if (keyIsPressed && key == 'e'){
-  //   drawEraser();
-  // }
-
-  drawSprites();
-
-  if(keyIsDown(LEFT_ARROW) || keyIsDown(RIGHT_ARROW) || keyIsDown(UP_ARROW) || keyIsDown(DOWN_ARROW)){
-    moveSprite()
+  if(mouseIsPressed === true ){
+    mouseDragged();
+  } else if (keyIsPressed && key == 'e'){
+    drawEraser();
   }
+  // console.log(mouseX, mouseY)
 
-  for(const drawing in drawingHistory){
-    line(drawingHistory[drawing].x, drawingHistory[drawing].y, drawingHistory[drawing].px, drawingHistory[drawing].py)
-    stroke(drawingHistory[drawing].r, drawingHistory[drawing].g, drawingHistory[drawing].b);
-    strokeWeight(5)
-  }
-
-  socket.on('load-cube', cube => {
-    drawSprites()
-    console.log("WERE IN THE LOAD CUBE FUNCTION")
-    newboxSprite = createSprite(cube.cubeX, cube.cubeY, 30, 30);
-    newboxSprite.shapeColor = color(cube.cubeR, cube.cubeG, cube.cubeB);
-  });
-
-  socket.on('sprite-disconnect', cube => {
-    console.log(cube)
-    // allSprites.removeSprites()
-    // cube.visible = false
-  })
 }
 
-//sprite functionalities 
-
-function makeCube(){
-  x = random(500, windowWidth);
-  y = random(50, windowHeight);
-
-  boxSprite = createSprite(x, y, 30, 30);
-  boxSprite.shapeColor = color(r, g, b);
-
-  let cube = {
-    cubeX: x,
-    cubeY: y,
-    cubeR: r,
-    cubeG: g,
-    cubeB: b, 
+function star(x, y, radius1, radius2, npoints) {
+  let angle = TWO_PI / npoints;
+  let halfAngle = angle / 2.0;
+  beginShape();
+  fill(255)
+  for (let a = 0; a < TWO_PI; a += angle) {
+    let sx = x + cos(a) * radius2;
+    let sy = y + sin(a) * radius2;
+    vertex(sx, sy);
+    sx = x + cos(a + halfAngle) * radius1;
+    sy = y + sin(a + halfAngle) * radius1;
+    vertex(sx, sy);
+    // noStroke()
   }
-  socket.emit('user-joined', cube)
-  console.log("WERE INSIDE MAKE CUBE")
-}
-
-function moveSprite(){
-  let currentUser = boxSprite
-
-  if(keyIsDown(LEFT_ARROW)){
-    currentUser.position.x -= 3;
-  }
-
-  if(keyIsDown(RIGHT_ARROW)){
-    currentUser.position.x += 3;
-  }
-  if(keyIsDown(UP_ARROW)){
-    currentUser.position.y -= 3;
-  }
-  if(keyIsDown(DOWN_ARROW)){
-    currentUser.position.y += 3;
-  }
-
-  let cubePosition = {
-    positionX: currentUser.position.x,
-    positionY: currentUser.position.y
-  }
-  // console.log(cubePosition)
-  socket.emit('key-pressed', cubePosition)
+  endShape(CLOSE);
 }
 
 function newDrawing(data){
-  drawingHistory.push(data)
-
+  // drawingHistory.push(data)
   if (!data.erase){
   line(data.x, data.y, data.px, data.py)
   stroke(data.r, data.g, data.b);
-  strokeWeight(5)
+  strokeWeight(3)
   } else {
   line(data.x, data.y, data.px, data.py)
-  strokeWeight(60);
-  stroke(bgColor);
+  strokeWeight(bgColor);
+  stroke(255,200,200);
   }
 }
 
 function mouseDragged() {
   line(mouseX, mouseY, pmouseX, pmouseY)
-  strokeWeight(5)
+  strokeWeight(3)
   stroke(r, g, b);
 
   let data = {
@@ -156,15 +100,13 @@ function mouseDragged() {
     px: pmouseX,
     py: pmouseY
   }
-
-  drawingHistory.push(data)
-  // console.log(drawingHistory)
   socket.emit('mouse', data)
 }
 
 function drawEraser(){
+  console.log("in eraser")
   strokeWeight(60);
-  stroke(bgColor);
+  stroke(10);
   line(mouseX, mouseY, pmouseX, pmouseY);
   let data = {
     erase: true,
@@ -173,7 +115,10 @@ function drawEraser(){
     px: pmouseX,
     py: pmouseY
   }
-  drawingHistory.push(data)
+  // drawingHistory.push(data)
   socket.emit('mouse', data)
 }
 
+// function windowResized(){
+//   resizeCanvas(windowWidth, windowHeight);
+// }

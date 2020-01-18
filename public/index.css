@@ -26,16 +26,19 @@ button {
 
 #chat-container {
   box-sizing: border-box; 
+  background:rgb(79, 79, 79);
+  opacity: 0.5;
   position: relative;
   direction: ltr;
   width: 30em;
   height: 27em;
   border:solid;
-/* 
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap; */
 }
+
+#chat-container:hover {
+  opacity: .90;
+}
+
 
 #nickname-input {
   max-width: 100px;

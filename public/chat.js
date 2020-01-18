@@ -1,11 +1,7 @@
-// var client = require("socket.io-client");
-// var socket = client.connect("sketch.js");
-
-socket = io.connect()
+let socket = io.connect()
 
 const nicknameContainer = document.getElementById('nickname-container')
 const nicknameInput = document.getElementById('nickname-input')
-
 const messageContainer = document.getElementById('message-container')
 const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
@@ -21,7 +17,8 @@ socket.on('chat-message', data => {
     for(const message in data){
       appendMessage(`${data[message].name}: ${data[message].message}`)
     }
-  } else if (!Array.isArray(data)){ //and this is how we send messages if its a new msg, new connection, or disconnect!
+  } else if (!Array.isArray(data)){ 
+    //and this is how we send messages if its a new msg, new connection, or disconnect!
     appendMessage(`${data.name}: ${data.message}`)
   }
 });

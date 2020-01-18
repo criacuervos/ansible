@@ -10,12 +10,8 @@ let io = socket(server);
 
 const client = []
 const history = []
-
-const allCubes = []
-
 const users = {} 
-
-const cubesnClients = {}
+const starData = []
 
 //Telling Express+Socket.io App To Listen To Port
 io.on('connection', socket => {
@@ -25,7 +21,7 @@ io.on('connection', socket => {
   let getClientID = client.find(e => (e.id === socket.client.id))
   if(getClientID){
     socket.emit("chat-message", history);
-    socket.emit("cube-history", cubesnClients);
+    socket.emit("send-star-states", starData);
   }
 
   //chat listeners
@@ -50,24 +46,17 @@ io.on('connection', socket => {
     socket.broadcast.emit('mouse', data);
   }
 
-  socket.on('user-joined', cube => {
-    // let socketIde = socket.id
-    // allCubes.push({ socketIde: cube})
-    // console.log(allCubes)
-    cubesnClients[socket.client.id] = cube
-    // console.log(cubesnClients) 
-    // allCubes.push(cube)
-    socket.broadcast.emit('load-cube', cube)
+  socket.on('star-states', starPositions => {
+    starData.push(starPositions)
   });
 
-  socket.on('key-pressed', cubePosition => {
-    socket.broadcast.emit('move-sprite', cubePosition)
-  })
+  // socket.on('key-pressed', cubePosition => {
+  //   socket.broadcast.emit('move-sprite', cubePosition)
+  // })
 
-  socket.on('disconnect', () => {
-    socket.broadcast.emit('sprite-disconnect', cubesnClients[socket.id])
-    // console.log(cubesnClients[socket.id])
-    delete cubesnClients[socket.id]
-  })
+  // socket.on('disconnect', () => {
+  //   socket.broadcast.emit('sprite-disconnect', cubesnClients[socket.id])
+  //   delete cubesnClients[socket.id]
+  // })
 
 })
