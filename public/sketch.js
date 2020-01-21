@@ -6,8 +6,12 @@ let radius1, radius2;
 let color1;
 let starPositions = [];
 let pg;
+let song;
+var slider;
 
-let bubble;
+function preload(){
+  song = loadSound("singing-bowls.mp3")
+}
 
 function setup() {
   socket = io.connect();
@@ -44,16 +48,20 @@ function setup() {
   })
   pg = createGraphics(windowWidth, windowHeight)
 
+  song.play();
+  slider = createSlider(0, 1, 0.5, 0.01);
 
-  let x = random(width);
-  let y = random(height);
-  let rR = random(10, 50);
-  bubble = new Bubble(x,y,rR);
-  // bubbles.push(bB);
+  // let x = random(width);
+  // let y = random(height);
+  // let rR = random(10, 50);
+  // bubble = new Bubble(x,y,rR);
+  // // bubbles.push(bB);
 
 }
 
 function draw(){ 
+  song.setVolume(slider.value());
+
   if(mouseIsPressed === true ){
     mouseDragged();
   } else if (keyIsPressed && key == 'e'){
@@ -154,6 +162,8 @@ function drawEraser(){
   socket.emit('mouse', data)
 }
 
+
+//for converting the stars into a class in the future - make them twinkle only when the mouse is near
 class Bubble {
   constructor(x, y, r){
     this.x = x,
