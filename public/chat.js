@@ -13,14 +13,13 @@ appendMessage('welcome to the chat!')
 socket.on('chat-message', data => {
   //here we check if its an array because thats how we load the previous chat data 
   if (Array.isArray(data)){
-    console.log(data)
+    // console.log(data)
     //make a for loop here which will index into the array of objects 
     for(const message in data){
       appendMessage(`${data[message].name}: ${data[message].message}`)
     }
   } else if (!Array.isArray(data)){ 
     //and this is how we send messages if its a new msg, new connection, or disconnect!
-    console.log(data)
     appendMessage(`${data.name}: ${data.message}`)
   }
 });
@@ -36,10 +35,10 @@ messageForm.addEventListener('submit', event => {
   socket.emit('send-chat-message', {name, message})
   messageInput.value = ''
 
-  // window.setInterval(function() {
-  //   let elem = document.getElementById('message-container');
-  //   elem.scrollTop = elem.scrollHeight;
-  // }, 1000);
+  window.setInterval(function() {
+    let elem = document.getElementById('message-container');
+    elem.scrollTop = elem.scrollHeight;
+  }, 1000);
 })
 
 //limit the length of user nickname input here 
