@@ -32,6 +32,7 @@ io.on('connection', socket => {
 
   socket.on('send-chat-message', data => {
     console.log(data)
+    socket.broadcast.emit('chat-message', data)
     socket.emit('chat-message', data)
     history.push(data)
   });

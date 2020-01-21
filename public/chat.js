@@ -1,4 +1,4 @@
-let socket = io.connect()
+var socket = io.connect()
 
 const nicknameContainer = document.getElementById('nickname-container')
 const nicknameInput = document.getElementById('nickname-input')
@@ -11,8 +11,6 @@ let name = "user"
 appendMessage('welcome to the chat!')
 
 socket.on('chat-message', data => {
-  console.log(data)
-  console.log("WERE IN CHAT MESSAGE")
   //here we check if its an array because thats how we load the previous chat data 
   if (Array.isArray(data)){
     console.log(data)
@@ -38,10 +36,10 @@ messageForm.addEventListener('submit', event => {
   socket.emit('send-chat-message', {name, message})
   messageInput.value = ''
 
-  window.setInterval(function() {
-    let elem = document.getElementById('message-container');
-    elem.scrollTop = elem.scrollHeight;
-  }, 1000);
+  // window.setInterval(function() {
+  //   let elem = document.getElementById('message-container');
+  //   elem.scrollTop = elem.scrollHeight;
+  // }, 1000);
 })
 
 //limit the length of user nickname input here 
