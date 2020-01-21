@@ -8,7 +8,9 @@ const messageInput = document.getElementById('message-input')
 
 let name = "user"
 
-appendMessage('welcome to the chat!')
+appendMessage(' welcome to the chat!')
+appendMessage(' press E to erase drawings ')
+
 
 socket.on('chat-message', data => {
   //here we check if its an array because thats how we load the previous chat data 
@@ -25,7 +27,11 @@ socket.on('chat-message', data => {
 });
 
 socket.on('user-connected', name => {
-  appendMessage(`${name} joined the chat`)
+  if(name){
+  appendMessage(`${name} has joined the chat`)
+  } else {
+  appendMessage('a new user is online!')
+  }
 })
 
 messageForm.addEventListener('submit', event => {
@@ -55,7 +61,9 @@ nicknameContainer.addEventListener('submit', event => {
 })
 
 socket.on('user-disconnected', name => {
-  appendMessage(`${name} disconnected`)
+  if(name){
+    appendMessage(`${name} disconnected`)
+  }
 })
 
 function appendMessage(message){

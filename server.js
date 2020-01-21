@@ -22,6 +22,7 @@ io.on('connection', socket => {
   if(getClientID){
     socket.emit("chat-message", history);
     socket.emit("send-star-states", starData);
+    socket.emit("user-connected")
   }
 
   //chat listeners

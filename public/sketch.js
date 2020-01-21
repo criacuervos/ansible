@@ -1,12 +1,13 @@
 var socket;
 let r, g, b;
-let bgColor;
 let cv;
 let x, y;
 let radius1, radius2;
 let color1;
 let starPositions = [];
 let pg;
+
+let bubble;
 
 function setup() {
   socket = io.connect();
@@ -18,11 +19,8 @@ function setup() {
   r = random(255);
   g = random(255);
   b = random(255);
-
   noStroke()
-
   socket.on('mouse', newDrawing)
-
   socket.on('send-star-states', starData => {
     // console.log(starData)
     if(starData.length > 0 ){
@@ -45,6 +43,14 @@ function setup() {
     }
   })
   pg = createGraphics(windowWidth, windowHeight)
+
+
+  let x = random(width);
+  let y = random(height);
+  let rR = random(10, 50);
+  bubble = new Bubble(x,y,rR);
+  // bubbles.push(bB);
+
 }
 
 function draw(){ 
@@ -59,7 +65,16 @@ function draw(){
   drawStars()
   makeMoon()
 
+  // bubble.move();
+  // bubble.show();
+
 }
+
+// function mousePressed(){
+//   for (let i = 0; i < bubbles.length; i ++) {
+//     bubbles[i].clicked(mouseX, mouseY)
+//   }
+// }
 
 function drawStars(){
   for (let star of starPositions){
@@ -83,7 +98,6 @@ function star(x, y, radius1, radius2, npoints) {
   let angle = TWO_PI / npoints;
   let halfAngle = angle / 2.0;
   beginShape();
-  // fill(255, 204, 0)
   for (let a = 0; a < TWO_PI; a += angle) {
     let sx = x + cos(a) * radius2;
     let sy = y + sin(a) * radius2;
@@ -138,4 +152,32 @@ function drawEraser(){
   }
   // drawingHistory.push(data)
   socket.emit('mouse', data)
+}
+
+class Bubble {
+  constructor(x, y, r){
+    this.x = x,
+    this.y = y;
+    this.r = r;
+    this.brightness = 0;
+  }
+
+  clicked(px, py){
+    let d = dist(px, py, this.x, this.y);
+    if (d < this.r){
+      this.brightness = 255;
+    }
+  }
+
+  move(){
+    this.x = this.x + random(-5, 5);
+    this.y = this.y + random(-5, 5);
+  }
+
+  show(){
+    stroke(255);
+    strokeWeight(4);
+    noFill();
+    ellipse(this.x, this.y, this.r * 2)
+  }
 }
