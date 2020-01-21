@@ -7,18 +7,14 @@ let radius1, radius2;
 let color1;
 let starPositions = [];
 let pg;
-let starColor = []
 
 function setup() {
   socket = io.connect();
-
   cv = createCanvas(windowWidth, windowHeight)
   cv.position(0, 0);
-  cv.style('z-index', '-1')
-  // cv.background(15)
-  color1 = color('#24243e');
-  var color2 = color('#302b63');
-  setGradient(0, 0, windowWidth, windowHeight, color1, color2, "Y");
+  cv.style('z-index', '-1');
+  color1 = color('#4e4376');
+  cv.background(color1)
   r = random(255);
   g = random(255);
   b = random(255);
@@ -34,8 +30,6 @@ function setup() {
       for (let {x, y, radius1, radius2} of starData[0]){
         // star(x, y, radius1, radius2, 5);
         starPositions.push({x, y, radius1, radius2})
-        starColor.push(color(random(100,255)))
-
       }
     } else if (starData.length === 0){
       console.log("This is first client code should go")
@@ -46,14 +40,10 @@ function setup() {
         radius2 = random(5),
         star(x, y, radius1, radius2, 5);
         starPositions.push({x, y, radius1, radius2})
-        starColor.push(color(random(100,255)))
-
       }
       socket.emit('star-states', starPositions)
     }
   })
-  console.log(starColor)
-
   pg = createGraphics(windowWidth, windowHeight)
 }
 
@@ -61,29 +51,32 @@ function draw(){
   if(mouseIsPressed === true ){
     mouseDragged();
   } else if (keyIsPressed && key == 'e'){
+    stroke(color1)
     drawEraser();
   }
   //code underneath image will render on top, so all drawn code will render on top layer 
   image(pg, 0, 0, windowWidth, windowHeight);
-  colorStars = map(mouseY, 0, 300, 0, 255);
+  drawStars()
+  makeMoon()
 
+}
 
+function drawStars(){
   for (let star of starPositions){
     noStroke()
     fill(random(100,255))
     this.star(star.x, star.y, star.radius1, star.radius2, 5);
   }
-
-  makeMoon()
-
 }
 
 function makeMoon(){
   noStroke();
   fill(230,230,180);
-  ellipse(1200,200,120,120);
+  let moonX = windowWidth - 200
+  let moonY = windowHeight - 600
+  ellipse(moonX, moonY, 120,120);
   fill(color1);
-  ellipse(1210,200,110,120);
+  ellipse(moonX + 6, moonY, 110,120);
 }
 
 function star(x, y, radius1, radius2, npoints) {
@@ -110,8 +103,8 @@ function newDrawing(data){
   strokeWeight(3)
   } else {
   line(data.x, data.y, data.px, data.py)
-  strokeWeight(bgColor);
-  stroke(255,200,200);
+  strokeWeight(20);
+  stroke(color1);
   }
 }
 
@@ -134,8 +127,7 @@ function mouseDragged() {
 }
 
 function drawEraser(){
-  strokeWeight(60);
-  stroke(10);
+  strokeWeight(20);
   line(mouseX, mouseY, pmouseX, pmouseY);
   let data = {
     erase: true,
@@ -146,24 +138,4 @@ function drawEraser(){
   }
   // drawingHistory.push(data)
   socket.emit('mouse', data)
-}
-
-function setGradient(x, y, w, h, c1, c2, axis) {
-  noFill();
-  if (axis == "Y") {  // Top to bottom gradient
-    for (let i = y; i <= y+h; i++) {
-      var inter = map(i, y, y+h, 0, 1);
-      var c = lerpColor(c1, c2, inter);
-      stroke(c);
-      line(x, i, x+w, i);
-    }
-  }  
-  else if (axis == "X") {  // Left to right gradient
-    for (let j = x; j <= x+w; j++) {
-      var inter2 = map(j, x, x+w, 0, 1);
-      var d = lerpColor(c1, c2, inter2);
-      stroke(d);
-      line(j, y, j, y+h);
-    }
-  }
 }

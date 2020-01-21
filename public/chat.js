@@ -11,14 +11,18 @@ let name = "user"
 appendMessage('welcome to the chat!')
 
 socket.on('chat-message', data => {
+  console.log(data)
+  console.log("WERE IN CHAT MESSAGE")
   //here we check if its an array because thats how we load the previous chat data 
   if (Array.isArray(data)){
+    console.log(data)
     //make a for loop here which will index into the array of objects 
     for(const message in data){
       appendMessage(`${data[message].name}: ${data[message].message}`)
     }
   } else if (!Array.isArray(data)){ 
     //and this is how we send messages if its a new msg, new connection, or disconnect!
+    console.log(data)
     appendMessage(`${data.name}: ${data.message}`)
   }
 });

@@ -30,9 +30,10 @@ io.on('connection', socket => {
     socket.broadcast.emit('user-connected', name)
   });
 
-  socket.on('send-chat-message', (data) => {
-    history.push(data)
+  socket.on('send-chat-message', data => {
+    console.log(data)
     socket.emit('chat-message', data)
+    history.push(data)
   });
 
   socket.on('disconnect', () => {
