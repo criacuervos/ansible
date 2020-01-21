@@ -7,6 +7,7 @@ let radius1, radius2;
 let color1;
 let starPositions = [];
 let pg;
+let starColor = []
 
 function setup() {
   socket = io.connect();
@@ -33,6 +34,8 @@ function setup() {
       for (let {x, y, radius1, radius2} of starData[0]){
         // star(x, y, radius1, radius2, 5);
         starPositions.push({x, y, radius1, radius2})
+        starColor.push(color(random(100,255)))
+
       }
     } else if (starData.length === 0){
       console.log("This is first client code should go")
@@ -43,10 +46,13 @@ function setup() {
         radius2 = random(5),
         star(x, y, radius1, radius2, 5);
         starPositions.push({x, y, radius1, radius2})
+        starColor.push(color(random(100,255)))
+
       }
       socket.emit('star-states', starPositions)
     }
   })
+  console.log(starColor)
 
   pg = createGraphics(windowWidth, windowHeight)
 }
@@ -59,10 +65,15 @@ function draw(){
   }
   //code underneath image will render on top, so all drawn code will render on top layer 
   image(pg, 0, 0, windowWidth, windowHeight);
+  colorStars = map(mouseY, 0, 300, 0, 255);
+
+
   for (let star of starPositions){
     noStroke()
+    fill(random(100,255))
     this.star(star.x, star.y, star.radius1, star.radius2, 5);
   }
+
   makeMoon()
 
 }
@@ -79,7 +90,7 @@ function star(x, y, radius1, radius2, npoints) {
   let angle = TWO_PI / npoints;
   let halfAngle = angle / 2.0;
   beginShape();
-  fill(255, 204, 0)
+  // fill(255, 204, 0)
   for (let a = 0; a < TWO_PI; a += angle) {
     let sx = x + cos(a) * radius2;
     let sy = y + sin(a) * radius2;
