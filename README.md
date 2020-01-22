@@ -36,3 +36,7 @@ http://localhost:3000/
 * [Socket.IO](https://socket.io/) enables real-time bidirectional event-based communication
 * [P5.js](https://p5js.org/libraries/) a JavaScript library for creative coding
 
+## Author & Acknowledgements
+
+This webapp was made by Vi Reigosa as their capstone project for Ada Cohort 12. 
+Big thanks to all the teachers & staff at Ada, as well as [Daniel Shiffman](https://thecodingtrain.com/) for making coding so accesible and fun to learn.
