@@ -10,10 +10,12 @@ let song;
 var slider;
 
 function preload(){
-  song = loadSound("singing-bowls.mp3")
+  song = loadSound('singing-bowls.mp3')
 }
 
 function setup() {
+  song.loop()
+
   socket = io.connect();
   cv = createCanvas(windowWidth, windowHeight)
   cv.position(0, 0);
@@ -48,7 +50,6 @@ function setup() {
   })
   pg = createGraphics(windowWidth, windowHeight)
 
-  song.play();
   slider = createSlider(0, 1, 0.5, 0.01);
 
   // let x = random(width);
@@ -60,6 +61,7 @@ function setup() {
 }
 
 function draw(){ 
+  song.play();
   song.setVolume(slider.value());
 
   if(mouseIsPressed === true ){
