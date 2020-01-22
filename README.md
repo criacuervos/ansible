@@ -1,4 +1,4 @@
-# Ansible 
+# Ansible Online
 
 ✍️ Ansible is a shared view of a night sky where you can make your own constellations and chat while you stargaze with friends.
 Simultaneous visitors to the site will be able to see and interact with one another through the chat and on the night sky as they draw.
