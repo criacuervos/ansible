@@ -38,9 +38,10 @@ http://localhost:3000/
 
 ## Built With
 
+* [P5.js](https://p5js.org/libraries/) a JavaScript library for creative coding
 * [Node.js](https://nodejs.org/en/about/) asynchronous event-driven JavaScript runtime built for network applications
 * [Socket.IO](https://socket.io/) enables real-time bidirectional event-based communication
-* [P5.js](https://p5js.org/libraries/) a JavaScript library for creative coding
+* [Express](https://expressjs.com/) a node.js web application framework
 
 ## Author & Acknowledgements
 
