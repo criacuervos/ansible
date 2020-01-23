@@ -24,6 +24,12 @@ git clone https://github.com/criacuervos/ansible.git
 node server.js
 ```
 
+3. Install dependencies 
+
+```
+npm install
+```
+
 3. Head to localhost in the browser
 
 ```
