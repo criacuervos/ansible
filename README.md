@@ -18,19 +18,19 @@ To use locally,
 git clone https://github.com/criacuervos/ansible.git
 ```
 
-2. Run the server 
-
-```
-node server.js
-```
-
-3. Install dependencies 
+2. Install dependencies 
 
 ```
 npm install
 ```
 
-3. Head to localhost in the browser
+3. Run the server 
+
+```
+node server.js
+```
+
+4. Head to localhost in the browser
 
 ```
 http://localhost:3000/
